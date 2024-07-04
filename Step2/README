@@ -1,12 +1,14 @@
 mc Eff:
 python Eff.py 1 gauss cmsshape nominal
 python Eff.py 1 cbexgauss cmsshape nominal
+#python Eff.py 1 gauss cmsshape LO
 python Eff.py 1 gauss cmsshape puUp
 python Eff.py 1 gauss cmsshape puDo
 
 data Eff:
 python Eff.py 0 gauss cmsshape nominal
 python Eff.py 0 cbexgauss cmsshape nominal
+#python Eff.py 0 gauss cmsshape LO
 python Eff.py 0 gauss cmsshape puUp
 python Eff.py 0 gauss cmsshape puDo
 python Eff.py 0 gauss expo nominal

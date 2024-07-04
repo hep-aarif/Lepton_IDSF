@@ -188,27 +188,27 @@ def Eff(filename,ismc,sig_shape,bkg_shape,unc):
 
   else:
     # get data hist
-    Mu_pass=ROOT.TH1D()
-    Mu_fail=ROOT.TH1D()
+    EG_pass=ROOT.TH1D()
+    EG_fail=ROOT.TH1D()
     filein_data=ROOT.TFile()
     if unc=='LO':
       filein_data=ROOT.TFile(path_data+filename,"READ")
-      filein_data.GetObject("TnP_mass_Mupass",Mu_pass)
-      filein_data.GetObject("TnP_mass_Mufail",Mu_fail)
+      filein_data.GetObject("TnP_mass_EGpass",EG_pass)
+      filein_data.GetObject("TnP_mass_EGfail",EG_fail)
     else: 
-      filein.GetObject("TnP_mass_Mupass",Mu_pass)
-      filein.GetObject("TnP_mass_Mufail",Mu_fail)
+      filein.GetObject("TnP_mass_EGpass",EG_pass)
+      filein.GetObject("TnP_mass_EGfail",EG_fail)
 
-    Mu_pass_error=ROOT.Double(0.)
-    Mu_fail_error=ROOT.Double(0.)
-    Mu_pass_total=Mu_pass.IntegralAndError(1,60,Mu_pass_error)
-    Mu_fail_total=Mu_fail.IntegralAndError(1,60,Mu_fail_error)
+    EG_pass_error=ROOT.Double(0.)
+    EG_fail_error=ROOT.Double(0.)
+    EG_pass_total=EG_pass.IntegralAndError(1,60,EG_pass_error)
+    EG_fail_total=EG_fail.IntegralAndError(1,60,EG_fail_error)
 
-    nSigP = ROOT.RooRealVar("nSigP","nSigP",0.9*Mu_pass_total,0.5*Mu_pass_total,1.5*Mu_pass_total)
-    nBkgP = ROOT.RooRealVar("nBkgP","nBkgP",0.1*Mu_pass_total,0.,1.5*Mu_pass_total)
+    nSigP = ROOT.RooRealVar("nSigP","nSigP",0.9*EG_pass_total,0.5*EG_pass_total,1.5*EG_pass_total)
+    nBkgP = ROOT.RooRealVar("nBkgP","nBkgP",0.1*EG_pass_total,0.,1.5*EG_pass_total)
   
-    nSigF = ROOT.RooRealVar("nSigF","nSigF",0.9*Mu_fail_total,0.5*Mu_fail_total,1.5*Mu_fail_total)
-    nBkgF = ROOT.RooRealVar("nBkgF","nBkgF",0.1*Mu_fail_total,0.,1.5*Mu_fail_total)
+    nSigF = ROOT.RooRealVar("nSigF","nSigF",0.9*EG_fail_total,0.5*EG_fail_total,1.5*EG_fail_total)
+    nBkgF = ROOT.RooRealVar("nBkgF","nBkgF",0.1*EG_fail_total,0.,1.5*EG_fail_total)
 
     dy_pass=ROOT.TH1D()
     dy_fail=ROOT.TH1D()
@@ -234,8 +234,8 @@ def Eff(filename,ismc,sig_shape,bkg_shape,unc):
     GenPass = ROOT.RooDataHist("GenPass","GenPass",ROOT.RooArgList(x),dy_pass)
     GenFail = ROOT.RooDataHist("GenFail","GenFail",ROOT.RooArgList(x),dy_fail)
 
-    DataPass = ROOT.RooDataHist("DataPass","DataPass",ROOT.RooArgList(x),Mu_pass)
-    DataFail = ROOT.RooDataHist("DataFail","DataFail",ROOT.RooArgList(x),Mu_fail)
+    DataPass = ROOT.RooDataHist("DataPass","DataPass",ROOT.RooArgList(x),EG_pass)
+    DataFail = ROOT.RooDataHist("DataFail","DataFail",ROOT.RooArgList(x),EG_fail)
 
     ZPassShape = ROOT.RooHistPdf("ZPassShape","ZPassShape",ROOT.RooArgSet(x), GenPass)
     ZFailShape = ROOT.RooHistPdf("ZFailShape","ZFailShape",ROOT.RooArgSet(x), GenFail)
@@ -469,22 +469,22 @@ def Eff(filename,ismc,sig_shape,bkg_shape,unc):
 
 if __name__ == "__main__":
 
-  tdptbin=array('d',[10,20,25,40,50,60,120,500])
-  tdptbin_plain=array('d',[1,2,3,4,5,6,7,8])
-  tdptbinname=['10~20','20~25','25~40','40~50','50~60','60~120','120~500']
-  tdetabin=array('d',[0.0,0.9,1.2,2.1,2.4])
+  tdptbin=array('d',[10,15,20,35,50,90,150])
+  tdptbin_plain=array('d',[1,2,3,4,5,6,7])
+  tdptbinname=['10~15','15~20','20~35','35~50','50~90','90~150']
+  tdetabin=array('d',[0.0, 0.8, 1.444, 1.566, 2.0, 2.5])
 
-  hist_eff = ROOT.TH2D('MuIDEff', 'MuIDEff', 4, tdetabin, 7, tdptbin_plain)
+  hist_eff = ROOT.TH2D('EleIDEff', 'EleIDEff', 5, tdetabin, 6, tdptbin_plain)
   hist_eff.Sumw2()
   hist_eff.SetStats(0)
-  hist_eff.GetXaxis().SetTitle('Muon #||{#eta}')
-  hist_eff.GetYaxis().SetTitle('Muon P_{T} [GeV]')
+  hist_eff.GetXaxis().SetTitle('Ele #||{#eta}')
+  hist_eff.GetYaxis().SetTitle('Ele P_{T} [GeV]')
   hist_eff.SetTitle('')
-  for ib in range(1,8):
+  for ib in range(1,7):
     hist_eff.GetYaxis().SetBinLabel(ib,tdptbinname[ib-1])
 
-  ptbinnames=['Pt10To20','Pt20To25','Pt25To40','Pt40To50','Pt50To60','Pt60To120','Pt120To500']
-  etabinnames=['Etam0p0Top0p9','Etap0p9Top1p2','Etap1p2Top2p1','Etap2p1Top2p4']
+  ptbinnames=['Pt10To15','Pt15To20','Pt20To35','Pt35To50','Pt50To90','Pt90To150']
+  etabinnames=['Etam0p0Top0p8','Etap0p8Top1p444','Etap1p444Top1p566','Etap1p566Top2p0','Etap2p0Top2p5']
 
   path='./'
   if unc=='LO':
@@ -509,6 +509,9 @@ if __name__ == "__main__":
       if etabinnames[3] in files:
         hist_eff.SetBinContent(4,1,eff)
         hist_eff.SetBinError(4,1,eff_err)
+      if etabinnames[4] in files:
+        hist_eff.SetBinContent(5,1,eff)
+        hist_eff.SetBinError(5,1,eff_err)
     if ptbinnames[1] in files:
       if etabinnames[0] in files:
         hist_eff.SetBinContent(1,2,eff)
@@ -522,6 +525,9 @@ if __name__ == "__main__":
       if etabinnames[3] in files:
         hist_eff.SetBinContent(4,2,eff)
         hist_eff.SetBinError(4,2,eff_err)
+      if etabinnames[4] in files:
+        hist_eff.SetBinContent(5,2,eff)
+        hist_eff.SetBinError(5,2,eff_err)
     if ptbinnames[2] in files:
       if etabinnames[0] in files:
         hist_eff.SetBinContent(1,3,eff)
@@ -535,6 +541,9 @@ if __name__ == "__main__":
       if etabinnames[3] in files:
         hist_eff.SetBinContent(4,3,eff)
         hist_eff.SetBinError(4,3,eff_err)
+      if etabinnames[4] in files:
+        hist_eff.SetBinContent(5,3,eff)
+        hist_eff.SetBinError(5,3,eff_err)
     if ptbinnames[3] in files:
       if etabinnames[0] in files:
         hist_eff.SetBinContent(1,4,eff)
@@ -548,6 +557,9 @@ if __name__ == "__main__":
       if etabinnames[3] in files:
         hist_eff.SetBinContent(4,4,eff)
         hist_eff.SetBinError(4,4,eff_err)
+      if etabinnames[4] in files:
+        hist_eff.SetBinContent(5,4,eff)
+        hist_eff.SetBinError(5,4,eff_err)
     if ptbinnames[4] in files:
       if etabinnames[0] in files:
         hist_eff.SetBinContent(1,5,eff)
@@ -561,6 +573,9 @@ if __name__ == "__main__":
       if etabinnames[3] in files:
         hist_eff.SetBinContent(4,5,eff)
         hist_eff.SetBinError(4,5,eff_err)
+      if etabinnames[4] in files:
+        hist_eff.SetBinContent(5,5,eff)
+        hist_eff.SetBinError(5,5,eff_err)
     if ptbinnames[5] in files:
       if etabinnames[0] in files:
         hist_eff.SetBinContent(1,6,eff)
@@ -574,19 +589,9 @@ if __name__ == "__main__":
       if etabinnames[3] in files:
         hist_eff.SetBinContent(4,6,eff)
         hist_eff.SetBinError(4,6,eff_err)
-    if ptbinnames[6] in files:
-      if etabinnames[0] in files:
-        hist_eff.SetBinContent(1,7,eff)
-        hist_eff.SetBinError(1,7,eff_err)
-      if etabinnames[1] in files:
-        hist_eff.SetBinContent(2,7,eff)
-        hist_eff.SetBinError(2,7,eff_err)
-      if etabinnames[2] in files:
-        hist_eff.SetBinContent(3,7,eff)
-        hist_eff.SetBinError(3,7,eff_err)
-      if etabinnames[3] in files:
-        hist_eff.SetBinContent(4,7,eff)
-        hist_eff.SetBinError(4,7,eff_err)
+      if etabinnames[4] in files:
+        hist_eff.SetBinContent(5,6,eff)
+        hist_eff.SetBinError(5,6,eff_err)
 
   c1 = TCanvas()
   pad1 = TPad()
