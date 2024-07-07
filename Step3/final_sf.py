@@ -6,21 +6,21 @@ CMSTDRStyle.setTDRStyle().cd()
 import CMSstyle
 
 path='../Effi/'
-
+print("here1")
 data_f1=ROOT.TFile(path+'data_eff_gauss_nominal/output.root','READ')
-print(data_f1)
+print("here2")
 #data_f2=ROOT.TFile(path+'data_eff_gauss_LO/output.root','READ')
 data_f3=ROOT.TFile(path+'data_eff_gauss_puUp/output.root','READ')
 data_f4=ROOT.TFile(path+'data_eff_gauss_puDo/output.root','READ')
 data_f5=ROOT.TFile(path+'data_eff_gauss_expo_nominal/output.root','READ')
 data_f6=ROOT.TFile(path+'data_eff_cbexgauss_nominal/output.root','READ')
 
-data_h1 = data_f1.Get('MuIDEff')
-#data_h2 = data_f2.Get('MuIDEff')
-data_h3 = data_f3.Get('MuIDEff')
-data_h4 = data_f4.Get('MuIDEff')
-data_h5 = data_f5.Get('MuIDEff')
-data_h6 = data_f6.Get('MuIDEff')
+data_h1 = data_f1.Get('EleIDEff')
+#data_h2 = data_f2.Get('EleIDEff')
+data_h3 = data_f3.Get('EleIDEff')
+data_h4 = data_f4.Get('EleIDEff')
+data_h5 = data_f5.Get('EleIDEff')
+data_h6 = data_f6.Get('EleIDEff')
 
 mc_f1=ROOT.TFile(path+'mc_eff_gauss_nominal/output.root','READ')
 #mc_f2=ROOT.TFile(path+'mc_eff_gauss_LO/output.root','READ')
@@ -28,11 +28,11 @@ mc_f3=ROOT.TFile(path+'mc_eff_gauss_puUp/output.root','READ')
 mc_f4=ROOT.TFile(path+'mc_eff_gauss_puDo/output.root','READ')
 mc_f5=ROOT.TFile(path+'mc_eff_cbexgauss_nominal/output.root','READ')
 
-mc_h1 = mc_f1.Get('MuIDEff')
-#mc_h2 = mc_f2.Get('MuIDEff')
-mc_h3 = mc_f3.Get('MuIDEff')
-mc_h4 = mc_f4.Get('MuIDEff')
-mc_h5 = mc_f5.Get('MuIDEff')
+mc_h1 = mc_f1.Get('EleIDEff')
+#mc_h2 = mc_f2.Get('EleIDEff')
+mc_h3 = mc_f3.Get('EleIDEff')
+mc_h4 = mc_f4.Get('EleIDEff')
+mc_h5 = mc_f5.Get('EleIDEff')
 
 data_h1.Divide(mc_h1) #nominal
 #data_h2.Divide(mc_h2) #LO
@@ -63,10 +63,10 @@ tdptbin=array('d',[10,20,25,40,50,60,120,500])
 tdptbinname=['10~20','20~25','25~40','40~50','50-60','60~120','120~Inf']
 tdetabin=array('d',[0.0, 0.9, 1.2, 2.1, 2.4])
 
-h2_SF = ROOT.TH2D('MuIDSF', 'MuIDSF', 4, tdetabin, 7, tdptbin)
+h2_SF = ROOT.TH2D('EleIDSF', 'EleIDSF', 4, tdetabin, 7, tdptbin)
 h2_SF.SetStats(0)
-h2_SF.GetYaxis().SetTitle('Muon P_{T} [GeV]')
-h2_SF.GetXaxis().SetTitle('Muon #||{#eta}')
+h2_SF.GetYaxis().SetTitle('Eleon P_{T} [GeV]')
+h2_SF.GetXaxis().SetTitle('Eleon #||{#eta}')
 h2_SF.SetTitle('')
 for ib in range(1,8):
   h2_SF.GetYaxis().SetBinLabel(ib,tdptbinname[ib-1])
